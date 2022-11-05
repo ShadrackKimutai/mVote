@@ -32,7 +32,7 @@ public class SplashActivity extends Activity {
     private void dashBoard(){
         Intent intent=new Intent(this,MainActivity.class);
         this.startActivity(intent);
-
+        this.finish();
     }
     private void StartAnimations() {
         Animation anim = AnimationUtils.loadAnimation(this, R.anim.alpha);

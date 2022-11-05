@@ -4,4 +4,9 @@
     <string name="access_chat">Chat</string>
     <string name="placeholder">PlaceHolder</string>
     <string name="app_logo">App Logo</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="login_label">Login</string>
+    <string name="cancel">0</string>
+    <string name="signin">1</string>
 </resources>

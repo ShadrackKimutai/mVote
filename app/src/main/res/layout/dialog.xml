@@ -4,29 +4,46 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:padding="10dp"
-    android:background="#ffffff">
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/txtPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter Password"
+        android:text="Enter User ID and Password"
         android:textAppearance="?android:attr/textAppearanceLarge"
         />
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp">
-    <EditText
-        android:id="@+id/editTextDialogUserInput"
+        android:layout_marginBottom="8dp"
+        android:hint="Enter Username">
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/editTextDialogUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:hint="Enter Password">
+        android:inputType="text"
+         />
         <requestFocus />
 
-    </EditText></android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Enter Password"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextDialogUserPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+             />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>
