@@ -4,9 +4,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +16,23 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import cz.msebera.android.httpclient.protocol.HTTP;
+import cz.msebera.android.httpclient.util.EntityUtils;
+
 public class MainActivity extends AppCompatActivity {
     List<DashBoardItem> lstItem;
-    //private Context context = this.getApplicationContext();
-
-
+    ProgressBar progressBar;
+    private int progressBarStatus = 0;
+    Boolean flag=false;
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -51,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // testLogin
                 login(userName.getText().toString(),userPassword.getText().toString());
-                drawContents(); // draws the dashboard
+                //  drawContents(); // draws the dashboard
             }
         });
         alertDialogBuilder.setNeutralButton("Register", new DialogInterface.OnClickListener() {
@@ -75,7 +89,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void login(String userName, String userPassword) {
-    }
+                new Thread(new Runnable() {
+                public void run() {
+                    while (progressBarStatus < 100) {
+                        progressBarStatus = 0;
+                        Util voterUtilities = new Util();
+
+                        String pass;
+                        pass = voterUtilities.encryptPassword(userPassword);
+                        String user = userName;
+                        Log.i("Debuging Info","Pass:" + userPassword + "-->" + pass);
+
+                        try {
+                            HttpClient client = new DefaultHttpClient();
+                            String postURL = "http://student.ktvc.ac.ke/Voting-App-Server-Side-master/m-vote/index.php";
+                            HttpPost post = new HttpPost(postURL);
+                            List<NameValuePair> params = new ArrayList<NameValuePair>();
+                            params.add(new BasicNameValuePair("ID", user));
+                            params.add(new BasicNameValuePair("Pass", pass));
+
+                            UrlEncodedFormEntity ent = new UrlEncodedFormEntity(params, HTTP.UTF_8);
+                            post.setEntity(ent);
+                            HttpResponse responsePOST = client.execute(post);
+                            HttpEntity resEntity = responsePOST.getEntity();
+                            if (resEntity != null) {
+                                String Result = EntityUtils.toString(resEntity);
+                                Result = Result.trim();
+                                System.out.println("Result" + Result);
+                                if (Result.equals("0")) {
+                                    flag = false;
+                                    progressBarStatus = 100;
+                                } else {
+                                    if (Result.equals("1")) {
+                                        flag = true;
+                                        progressBarStatus = 100;
+                                    }
+                                }
+
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            }).start();
+        }
 
 
     private void drawContents(){

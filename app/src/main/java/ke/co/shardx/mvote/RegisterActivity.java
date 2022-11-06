@@ -101,17 +101,19 @@ public class RegisterActivity extends Activity {
 
                     Log.i("Captured Details","names:"+firstName+" "+lastName+" "+"password:"+passWord+"ID:"+ID);
                     try {
-                        HttpClient client = new DefaultHttpClient();
-                        String postURL = "http://student.ktvc.ac.ke/Voting-App-Server-Side-master/m-vote/";
+                        HttpClient client;
+                        client = new DefaultHttpClient();
+                        String postURL = "http://student.ktvc.ac.ke/Voting-App-Server-Side-master/m-vote/register.php";
                         HttpPost post = new HttpPost(postURL);
                         List<NameValuePair> params = new ArrayList<NameValuePair>();
-                        params.add(new BasicNameValuePair("Voter_ID", ID));
-                        params.add(new BasicNameValuePair("Voter_FName", firstName));
-                        params.add(new BasicNameValuePair("Voter_SName", lastName));
-                        params.add(new BasicNameValuePair("Voter_Pass", passWord));
+                        params.add(new BasicNameValuePair("ID", ID));
+                        params.add(new BasicNameValuePair("FName", firstName));
+                        params.add(new BasicNameValuePair("SName", lastName));
+                        params.add(new BasicNameValuePair(" Pass", Util.encryptPassword(passWord)));
 
 
-                        UrlEncodedFormEntity ent = new UrlEncodedFormEntity(params, HTTP.UTF_8);
+                        UrlEncodedFormEntity ent;
+                        ent = new UrlEncodedFormEntity(params, HTTP.UTF_8);
                         post.setEntity(ent);
                         HttpResponse responsePOST = client.execute(post);
                         HttpEntity resEntity = responsePOST.getEntity();
