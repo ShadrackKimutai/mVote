@@ -10,7 +10,7 @@
         android:id="@+id/txtPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter User ID and Password"
+        android:text="Enter College ID and Password"
         android:textAppearance="?android:attr/textAppearanceLarge"
         />
     <com.google.android.material.textfield.TextInputLayout
@@ -18,13 +18,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:hint="Enter Username">
+        android:hint="Enter College ID">
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editTextDialogUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-         />
+        />
         <requestFocus />
 
     </com.google.android.material.textfield.TextInputLayout>

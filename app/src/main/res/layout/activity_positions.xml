@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:scrollbars="vertical"
+    android:scrollbarSize="@dimen/activity_vertical_margin"
+    android:scrollbarStyle="outsideOverlay"
+    android:scrollIndicators="right"
+    tools:orientation="vertical"
+    android:weightSum="1">
+
+    <TextView
+        android:text="Positions / Viti"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_weight="0.08"
+        android:fontFamily="sans-serif"
+        android:typeface="normal"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:text="Click  to select candidate / Bonyeza ndio uchague mwaniaji"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:layout_weight="0.08" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="393dp"
+        android:layout_weight="0.37">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CHAIRMAN"
+                android:id="@+id/btn0"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="VICE CHAIRMAN"
+                android:id="@+id/btn1"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="GENERAL SECRETARY"
+                android:id="@+id/btn2"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="VICE GENERAL SECRETARY"
+                android:id="@+id/btn3"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FINANCE"
+                android:id="@+id/btn4"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CATERING"
+                android:id="@+id/btn5"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="VICE CATERING"
+                android:id="@+id/btn6"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SECURITY AND ACCOMODATION"
+                android:id="@+id/btn7"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="EDUCATION"
+                android:id="@+id/btn8"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CLUBS AND SOCIETIES"
+                android:id="@+id/btn9"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="HEALTH"
+                android:id="@+id/btn10"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ENTERTAINMENT"
+                android:id="@+id/btn11"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ENVIRONMENT"
+                android:id="@+id/btn12"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SPORTS"
+                android:id="@+id/btn13"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="EAC REPRESENTATIVE"
+                android:id="@+id/btn14"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

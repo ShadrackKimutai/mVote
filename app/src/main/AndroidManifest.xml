@@ -23,6 +23,7 @@
         <activity android:name="ke.co.shardx.mvote.MainActivity"
             android:label="@string/app_name" />
       <activity android:name="ke.co.shardx.mvote.RegisterActivity" />
+      <activity android:name="ke.co.shardx.mvote.CandidatesActivity"/>
     </application>
 
 

@@ -1,12 +1,18 @@
 package ke.co.shardx.mvote;
 
 
+import static android.app.PendingIntent.getActivity;
+
+import android.app.Activity;
 import android.content.Context;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class DashBoardItemAdapter extends RecyclerView.Adapter<DashBoardItemAdapter.myViewHolder> {
-
+    Adapter adapter;
     private Context context;
     private List<DashBoardItem> myItem;
 
@@ -60,8 +66,71 @@ public class DashBoardItemAdapter extends RecyclerView.Adapter<DashBoardItemAdap
                 public void onClick(View v) {
 
                     Log.i("Pathfinder", "Where Am I " + textView.getText());
-                    //Toast.makeText(context, "Where Am I " + textView.getText(), Toast.LENGTH_SHORT).show();
+
+                    /*
+                    *
+                    *
+                    *   lstItem.add(new DashBoardItem("Chair Person",R.drawable.icon));
+                    *   lstItem.add(new DashBoardItem("Vice Chair Person",R.drawable.icon));
+                    *   lstItem.add(new DashBoardItem("Academic Rep",R.drawable.icon));
+                    *   lstItem.add(new DashBoardItem("Hospitality Rep", R.drawable.icon));
+                    *   lstItem.add(new DashBoardItem("Health Rep",R.drawable.icon));
+                    *   lstItem.add(new DashBoardItem("Sports Rep",R.drawable.icon));
+                    *   lstItem.add(new DashBoardItem("Departmental Rep",R.drawable.icon));
+                    *   lstItem.add(new DashBoardItem("Class Rep",R.drawable.icon));
+                    *
+                    *
+                    * */
+                    String level =textView.getText().toString();
+                    switch (level){
+                        case "Chair Person" :
+
+                            Log.i("Position","chairman");
+
+
+
+                            try{
+                                Bundle bundle = new Bundle();
+                                bundle.putString("seat","Chair Person");
+
+                                Intent intent = new Intent(view.getContext(), CandidatesActivity.class);
+                                intent.putExtras(bundle);
+                                view.getContext().startActivity(intent);
+                                // finish();
+                            }catch (Exception x){
+                                System.out.println(x.getMessage());
+                            }
+
+                            break;
+
+                        case "Vice Chair Person" :
+                            Log.i("Position","Vice chairman");
+                            break;
+                        case "Academic Rep"  :
+                            Log.i("Position","Academic Rep");
+                            break;
+                        case "Hospitality Rep" :
+                            Log.i("Position","Hospitality Rep");
+                            break;
+
+                        case "Health Rep":
+                            Log.i("Position","Health Rep");
+                            break;
+
+                        case "Sports Rep":
+                            Log.i("Position","Sports Rep");
+                            break;
+
+                        case "Departmental Rep":
+                            Log.i("Position","Departmental Rep");
+                            break;
+                        case "Class Rep":
+                            Log.i("Position","Class Rep");
+                            break;
+
+                    }
                 }
+
             });
         }
     }

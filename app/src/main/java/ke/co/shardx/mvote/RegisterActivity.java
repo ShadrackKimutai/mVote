@@ -121,14 +121,14 @@ public class RegisterActivity extends Activity {
                             Result = EntityUtils.toString(resEntity);
                             Result=Result.trim();
                             System.out.println(Result);
-                            if (Result.equals("e")){
+                            if (Result.equals("F")){
                                 flag=false;
                                 progressBarStatus=100;
-                            }else if (Result.equals("r")) {
+                            }else if (Result.equals("e")) {
                                 flag = true;
                                 success=false;
                                 progressBarStatus = 100;
-                            }else if(Result.equals("s")) {
+                            }else if(Result.equals("S")) {
                                 flag=true;
                                 success=true;
                                 progressBarStatus=100;

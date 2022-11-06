@@ -9,4 +9,5 @@
     <string name="login_label">Login</string>
     <string name="cancel">0</string>
     <string name="signin">1</string>
+    <string name="votes_cast_in_favour">Votes Cast in Favour</string>
 </resources>

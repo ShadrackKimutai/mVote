@@ -1,9 +1,11 @@
 package ke.co.shardx.mvote;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,13 +32,12 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 
 public class MainActivity extends AppCompatActivity {
     List<DashBoardItem> lstItem;
-    ProgressBar progressBar;
-    private int progressBarStatus = 0;
+    int progressBarStatus = 0;
     Boolean flag=false;
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-       // drawContents();
+
     }
 
     @Override
@@ -65,7 +66,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // testLogin
                 login(userName.getText().toString(),userPassword.getText().toString());
-                //  drawContents(); // draws the dashboard
+                if (!flag) {
+                    drawContents();
+                }// draws the dashboard
             }
         });
         alertDialogBuilder.setNeutralButton("Register", new DialogInterface.OnClickListener() {
@@ -89,7 +92,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void login(String userName, String userPassword) {
-                new Thread(new Runnable() {
+
+
+        final ProgressDialog progressBar=new ProgressDialog(this);
+        progressBar.setCancelable(false);
+        progressBar.setMessage("Authenticating "+userName.toUpperCase()+"... ");
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressBar.setProgress(0);
+        progressBar.setMax(100);
+        progressBar.show();
+
+        new Thread(new Runnable() {
+                    private Handler progressBarHandler = new Handler();
                 public void run() {
                     while (progressBarStatus < 100) {
                         progressBarStatus = 0;
@@ -116,11 +130,11 @@ public class MainActivity extends AppCompatActivity {
                                 String Result = EntityUtils.toString(resEntity);
                                 Result = Result.trim();
                                 System.out.println("Result" + Result);
-                                if (Result.equals("0")) {
+                                if (Result.equals("F")) {
                                     flag = false;
                                     progressBarStatus = 100;
                                 } else {
-                                    if (Result.equals("1")) {
+                                    if (Result.equals("S")) {
                                         flag = true;
                                         progressBarStatus = 100;
                                     }
@@ -129,6 +143,32 @@ public class MainActivity extends AppCompatActivity {
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                        }
+
+                        progressBarHandler.post(new Runnable() {
+                            public void run() {
+                                progressBar.setProgress(progressBarStatus);
+                            }
+                        });
+
+                    }
+
+                    if (progressBarStatus >= 100) {
+                        try {
+                            Thread.sleep(3000);
+
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        progressBar.dismiss();
+
+                        if (flag.equals(false)) {
+                            Intent i = new Intent(getApplicationContext(), SplashActivity.class);
+                            startActivity(i);
+                            finish();
+                        } else {
+                          //  finish();
                         }
 
                     }
@@ -142,14 +182,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         lstItem=new ArrayList<>();
-        lstItem.add(new DashBoardItem("Profile",R.drawable.profile));
-        lstItem.add(new DashBoardItem("Tutorials",R.drawable.tut));
-        lstItem.add(new DashBoardItem("Resources", R.drawable.git));
-        lstItem.add(new DashBoardItem("Slack",R.drawable.slack));
-        lstItem.add(new DashBoardItem("IRC",R.drawable.chat));
-        lstItem.add(new DashBoardItem("Social",R.drawable.face));
-        lstItem.add(new DashBoardItem("Sketches",R.drawable.sketchpad));
-        lstItem.add(new DashBoardItem("Brought By",R.drawable.placeholder));
+        lstItem.add(new DashBoardItem("Chair Person",R.drawable.icon));
+        lstItem.add(new DashBoardItem("Vice Chair Person",R.drawable.icon));
+        lstItem.add(new DashBoardItem("Academic Rep",R.drawable.icon));
+        lstItem.add(new DashBoardItem("Hospitality Rep", R.drawable.icon));
+        lstItem.add(new DashBoardItem("Health Rep",R.drawable.icon));
+        lstItem.add(new DashBoardItem("Sports Rep",R.drawable.icon));
+        lstItem.add(new DashBoardItem("Departmental Rep",R.drawable.icon));
+        lstItem.add(new DashBoardItem("Class Rep",R.drawable.icon));
 
         screen=getOrientation();
         if(screen== Configuration.ORIENTATION_PORTRAIT) {
