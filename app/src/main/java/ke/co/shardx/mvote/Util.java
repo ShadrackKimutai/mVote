@@ -1,5 +1,7 @@
 package ke.co.shardx.mvote;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.util.Log;
 
 import java.io.IOException;
@@ -23,14 +25,15 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 
 public class Util {
     public void voteForCandidate(final String Candidate,final String Chair,int CurrentVotes,final String userID) {
-        final int Votes=CurrentVotes +1;
+        final int Votes = CurrentVotes + 1;
         new Thread(new Runnable() {
             int progressBarStatus = 0;
+
             public void run() {
                 while (progressBarStatus < 100) {
                     String Result;
                     /* Start Insert */
-                    Log.i("Voting Activity",Chair);
+                    //   Log.i("Voting Activity",userID);
                     HttpClient client = new DefaultHttpClient();
                     String postURL = "http://student.ktvc.ac.ke/Voting-App-Server-Side-master/m-vote/vote.php";
                     HttpPost post = new HttpPost(postURL);
@@ -55,10 +58,13 @@ public class Util {
                         HttpEntity resEntity = responsePOST.getEntity();
                         if (resEntity != null) {
                             Result = EntityUtils.toString(resEntity);
-                            Result=Result.trim();
+                            Result = Result.trim();
                             System.out.println(Result);
-                            System.out.println("Inserted"+responsePOST.toString());
-                            progressBarStatus=100;
+
+                             Log.e("Voting Error","Attempt to vote twice");
+
+                            System.out.println("Inserted" + responsePOST.toString());
+                            progressBarStatus = 100;
                         }
 
 
@@ -187,6 +193,7 @@ System.out.println("Registered is now is " + registered[0]);
         formatter.close();
         return result;
     }
+
 
 
 

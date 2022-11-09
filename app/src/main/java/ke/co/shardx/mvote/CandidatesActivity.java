@@ -2,24 +2,18 @@ package ke.co.shardx.mvote;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
 import org.json.JSONArray;
@@ -39,17 +33,13 @@ import java.util.List;
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
-import cz.msebera.android.httpclient.client.ClientProtocolException;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
-import cz.msebera.android.httpclient.params.BasicHttpParams;
 import cz.msebera.android.httpclient.protocol.HTTP;
 import cz.msebera.android.httpclient.util.EntityUtils;
-import ke.co.shardx.mvote.Util;
-import ke.co.shardx.mvote.R;
 
 /**
  * Created by Shady on 03-Mar-17.
@@ -79,7 +69,7 @@ public class CandidatesActivity extends Activity {
         list = (ListView) findViewById(R.id.listView);
         personList = new ArrayList<HashMap<String, String>>();
         Bundle bundle = getIntent().getExtras();
-        userID=bundle.getString("userid");
+        userID=bundle.getString("user");
         position = bundle.getString("seat");
         //System.out.println(position);
         checkExist();
@@ -91,17 +81,17 @@ public class CandidatesActivity extends Activity {
                 final int innerPos = pos;
                 String candidate = personList.get(innerPos).get("name");
                 int currentVotes = Integer.parseInt(personList.get(innerPos).get("votes"));
-                voteForSelectedItem(candidate, currentVotes);
+                voteForSelectedItem(candidate, currentVotes,userID);
 
             }
         });
     }
 
-    private void voteForSelectedItem(final String candidate, final int currentVotes) {
+    private void voteForSelectedItem(final String candidate, final int currentVotes, String userID) {
 
         System.out.println(candidate + "Current Votes:" + currentVotes);
         final Handler handler = new Handler();
-        final String imei = getImei();
+        final String user = Util.encryptPassword(userID); // encrypt fpor privacy
         new Thread() {
             @Override
             public void run() {
@@ -121,8 +111,8 @@ public class CandidatesActivity extends Activity {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             // System.out.println("Call your Function");
-
-                                            util.voteForCandidate(candidate, position, currentVotes, imei);
+                                            //Log.i("ID in CandidateActivity",user);
+                                            util.voteForCandidate(candidate, position, currentVotes, user);
                                             finish();
                                         }
                                     })
@@ -170,7 +160,7 @@ public class CandidatesActivity extends Activity {
                     HttpPost post = new HttpPost(postURL);
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair("seat", String.valueOf(position)));
-                    params.add(new BasicNameValuePair("ID", userID));
+                    params.add(new BasicNameValuePair("ID", Util.encryptPassword(userID)));
 
 
                     UrlEncodedFormEntity ent = null;
@@ -195,9 +185,10 @@ public class CandidatesActivity extends Activity {
                                 }
                                 new AlertDialog.Builder(CandidatesActivity.this)
 
-                                        .setTitle("Voting Barred")
+                                        .setTitle("Voting Attempt Blocked!")
+                                        .setIcon(R.drawable.mvote)
                                         .setCancelable(false)
-                                        .setMessage("You have already voted for a candidate vying for this seat.\nVoting Barred!")
+                                        .setMessage("You have already voted for a candidate vying for this seat. Attempt Blocked")
                                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {

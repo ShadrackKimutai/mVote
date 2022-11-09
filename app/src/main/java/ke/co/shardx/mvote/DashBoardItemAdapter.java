@@ -1,9 +1,9 @@
 package ke.co.shardx.mvote;
 
 
-import static android.app.PendingIntent.getActivity;
 
-import android.app.Activity;
+import static ke.co.shardx.mvote.CandidatesActivity.userID;
+
 import android.content.Context;
 
 import android.content.Intent;
@@ -12,23 +12,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
 
-public class DashBoardItemAdapter extends RecyclerView.Adapter<DashBoardItemAdapter.myViewHolder> {
-    Adapter adapter;
+public class  DashBoardItemAdapter extends RecyclerView.Adapter<DashBoardItemAdapter.myViewHolder> {
+
     private Context context;
     private List<DashBoardItem> myItem;
+    private String userID;
+    static String UserID;
 
-    public DashBoardItemAdapter(Context context, List<DashBoardItem> myItem) {
+    public DashBoardItemAdapter(Context context, List<DashBoardItem> myItem,String userID) {
         this.context = context;
         this.myItem = myItem;
+        this.userID=userID;
+        UserID=userID;
     }
 
     @Override
@@ -56,12 +56,15 @@ public class DashBoardItemAdapter extends RecyclerView.Adapter<DashBoardItemAdap
 
         TextView textView;
         ImageView imageView;
+
         public myViewHolder(View view) {
             super(view);
             textView = (TextView) itemView.findViewById(R.id.dashboard_item_id);
             imageView = (ImageView) itemView.findViewById(R.id.dashboard_img_id);
 
             view.setOnClickListener(new View.OnClickListener() {
+
+
                 @Override
                 public void onClick(View v) {
 
@@ -86,14 +89,14 @@ public class DashBoardItemAdapter extends RecyclerView.Adapter<DashBoardItemAdap
                         case "Chair Person" :
 
                             Log.i("Position","chairman");
-
-
+                           // Log.i("UserID",UserID);
 
                             try{
                                 Bundle bundle = new Bundle();
-                                bundle.putString("seat","Chair Person");
-
                                 Intent intent = new Intent(view.getContext(), CandidatesActivity.class);
+                                bundle.putString("seat","Chair Person");
+                                bundle.putString("user",UserID);
+
                                 intent.putExtras(bundle);
                                 view.getContext().startActivity(intent);
                                 // finish();
@@ -133,6 +136,7 @@ public class DashBoardItemAdapter extends RecyclerView.Adapter<DashBoardItemAdap
 
             });
         }
+
     }
 
 }

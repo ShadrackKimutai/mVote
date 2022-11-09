@@ -33,6 +33,7 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 public class MainActivity extends AppCompatActivity {
     List<DashBoardItem> lstItem;
     int progressBarStatus = 0;
+    public String userID;
     Boolean flag=false;
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // testLogin
+                userID=userName.getText().toString();
                 login(userName.getText().toString(),userPassword.getText().toString());
                 if (!flag) {
                     drawContents();
@@ -194,12 +196,12 @@ public class MainActivity extends AppCompatActivity {
         screen=getOrientation();
         if(screen== Configuration.ORIENTATION_PORTRAIT) {
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.dashboardview_id);
-            DashBoardItemAdapter dashBoardItemAdapter = new DashBoardItemAdapter(this, lstItem);
+            DashBoardItemAdapter dashBoardItemAdapter = new DashBoardItemAdapter(this, lstItem,userID);
             recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
             recyclerView.setAdapter(dashBoardItemAdapter);
         }else {
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.dashboardview_id);
-            DashBoardItemAdapter dashBoardItemAdapter = new DashBoardItemAdapter(this, lstItem);
+            DashBoardItemAdapter dashBoardItemAdapter = new DashBoardItemAdapter(this, lstItem,userID);
             recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
             recyclerView.setAdapter(dashBoardItemAdapter);
         }

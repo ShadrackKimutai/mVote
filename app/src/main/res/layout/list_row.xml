@@ -13,10 +13,12 @@
             android:id="@+id/name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="#343434"
-            android:textSize="14dip"
-            android:paddingBottom="2dip"
-            android:textStyle="bold"/>
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dip"
+            android:textStyle="bold"
+                android:gravity="left"/>
 
 
         <TextView
@@ -26,7 +28,9 @@
             android:gravity="right"
             android:layout_gravity="right"
             android:textStyle="bold"
-            android:textSize="14dip"
+            android:textSize="24dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             />
 
 
