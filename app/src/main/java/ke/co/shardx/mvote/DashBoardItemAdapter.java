@@ -83,18 +83,36 @@ public class  DashBoardItemAdapter extends RecyclerView.Adapter<DashBoardItemAda
                     *   lstItem.add(new DashBoardItem("Class Rep",R.drawable.icon));
                     *
                     *
-                    * */
+                    *
                     String level =textView.getText().toString();
                     switch (level){
                         case "Chair Person" :
 
                             Log.i("Position","chairman");
                            // Log.i("UserID",UserID);
-
+                   */
+                    String level =textView.getText().toString();
                             try{
                                 Bundle bundle = new Bundle();
                                 Intent intent = new Intent(view.getContext(), CandidatesActivity.class);
-                                bundle.putString("seat","Chair Person");
+                                bundle.putString("seat",level);
+                                bundle.putString("user",UserID);
+
+                                intent.putExtras(bundle);
+                                view.getContext().startActivity(intent);
+                                // finish();
+                            }catch (Exception x){
+                                System.out.println(x.getMessage());
+                            }
+/*
+                            break;
+
+                        case "Vice Chair Person" :
+                            Log.i("Position","Vice chairman");
+                            try{
+                                Bundle bundle = new Bundle();
+                                Intent intent = new Intent(view.getContext(), CandidatesActivity.class);
+                                bundle.putString("seat",level);
                                 bundle.putString("user",UserID);
 
                                 intent.putExtras(bundle);
@@ -104,16 +122,40 @@ public class  DashBoardItemAdapter extends RecyclerView.Adapter<DashBoardItemAda
                                 System.out.println(x.getMessage());
                             }
 
-                            break;
 
-                        case "Vice Chair Person" :
-                            Log.i("Position","Vice chairman");
+
                             break;
                         case "Academic Rep"  :
                             Log.i("Position","Academic Rep");
+                            try{
+                                Bundle bundle = new Bundle();
+                                Intent intent = new Intent(view.getContext(), CandidatesActivity.class);
+                                bundle.putString("seat",level);
+                                bundle.putString("user",UserID);
+
+                                intent.putExtras(bundle);
+                                view.getContext().startActivity(intent);
+                                // finish();
+                            }catch (Exception x){
+                                System.out.println(x.getMessage());
+                            }
+
+
                             break;
                         case "Hospitality Rep" :
                             Log.i("Position","Hospitality Rep");
+                            try{
+                                Bundle bundle = new Bundle();
+                                Intent intent = new Intent(view.getContext(), CandidatesActivity.class);
+                                bundle.putString("seat",level);
+                                bundle.putString("user",UserID);
+
+                                intent.putExtras(bundle);
+                                view.getContext().startActivity(intent);
+                                // finish();
+                            }catch (Exception x){
+                                System.out.println(x.getMessage());
+                            }
                             break;
 
                         case "Health Rep":
@@ -132,6 +174,8 @@ public class  DashBoardItemAdapter extends RecyclerView.Adapter<DashBoardItemAda
                             break;
 
                     }
+
+                */
                 }
 
             });

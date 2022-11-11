@@ -10,13 +10,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import cz.msebera.android.httpclient.HttpEntity;
@@ -31,10 +38,20 @@ import cz.msebera.android.httpclient.protocol.HTTP;
 import cz.msebera.android.httpclient.util.EntityUtils;
 
 public class MainActivity extends AppCompatActivity {
+    public Date [] theDays;
     List<DashBoardItem> lstItem;
     int progressBarStatus = 0;
     public String userID;
     Boolean flag=false;
+    boolean checkDateFlag=false;
+    private String regStart;
+    private String regStop;
+    private String voteStart;
+    private String voteStop;
+    Util util = new Util();
+    String[] dates = util.getDates();
+
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -46,10 +63,17 @@ public class MainActivity extends AppCompatActivity {
         final EditText userName,userPassword;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(checkDateFlag==false) {
+
+            regStart = dates[0];
+           /* regStop = util.getDates()[1];
+            voteStart = util.getDates()[2];
+            voteStop = util.getDates()[3];*/
+          //  Log.i("Check Regstart","regstart is"+ dates[0]);
+            flag=true;
+        }
 
 
-
-        String getM;
         LayoutInflater layoutInflater=LayoutInflater.from(MainActivity.this);
         View view=layoutInflater.inflate(R.layout.dialog,null);
         AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(MainActivity.this);
@@ -63,19 +87,24 @@ public class MainActivity extends AppCompatActivity {
         alertDialogBuilder.setPositiveButton("Login",
                 new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // testLogin
-                userID=userName.getText().toString();
-                login(userName.getText().toString(),userPassword.getText().toString());
-                if (!flag) {
-                    drawContents();
-                }// draws the dashboard
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                        // testLogin
+                        userID = userName.getText().toString();
+                        login(userName.getText().toString(), userPassword.getText().toString());
+                        if (!flag) {
+                            drawContents();
+                        }// draws the dashboard
+                    }
+
+                });
         alertDialogBuilder.setNeutralButton("Register", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
+
                 dialogInterface.dismiss();
                 startActivity(new Intent(MainActivity.this,RegisterActivity.class));
             }
@@ -95,6 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void login(String userName, String userPassword) {
 
+        java.util.Date c = Calendar.getInstance().getTime();
+      //  Log.i("Reg Start",regStart);
 
         final ProgressDialog progressBar=new ProgressDialog(this);
         progressBar.setCancelable(false);
@@ -178,6 +209,13 @@ public class MainActivity extends AppCompatActivity {
             }).start();
         }
 
+    private String formatDate(Date date) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            return dateFormat.format(date);
+
+    }
+
 
     private void drawContents(){
         int screen=0;
@@ -214,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
 
         return orientation;
     }
-
 
 
 }
