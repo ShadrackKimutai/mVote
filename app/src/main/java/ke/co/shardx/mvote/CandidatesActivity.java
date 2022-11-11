@@ -78,11 +78,11 @@ public class CandidatesActivity extends Activity {
         userID=bundle.getString("user");
         position = bundle.getString("seat");
         //System.out.println(position);
-    if (!voted){
+
         checkExist();
-        voted=true;
-    }
-            getData();
+        getData();
+
+
 
         list.setAdapter(new ArrayAdapter<String>(this, R.layout.activity_candidates));
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -191,7 +191,7 @@ public class CandidatesActivity extends Activity {
                                     Looper.prepare();
                                 }
 
-                                   new AlertDialog.Builder(getApplicationContext())
+                                   new AlertDialog.Builder(CandidatesActivity.this)
 
                                            .setTitle("Voting Attempt Blocked!")
                                            .setCancelable(false)

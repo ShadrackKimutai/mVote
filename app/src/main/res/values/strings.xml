@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">myVote</string>
+    <string name="app_name">mVote</string>
     <string name="access_source">Repositories</string>
     <string name="access_chat">Chat</string>
     <string name="placeholder">PlaceHolder</string>

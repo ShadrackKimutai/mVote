@@ -1,14 +1,21 @@
 package ke.co.shardx.mvote;
 
+import static com.google.android.material.internal.ContextUtils.getActivity;
+
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
@@ -40,19 +47,18 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 
 public class MainActivity extends AppCompatActivity {
     public Date[] theDays;
+    public String userID;
     List<DashBoardItem> lstItem;
     int progressBarStatus = 0;
-    public String userID;
     Boolean flag = false;
     boolean checkDateFlag = false;
     int [] dateFlag=new int[6];
+    Util util = new Util();
+    String[] dates = util.getDates();
     private String regStart;
     private String regStop;
     private String voteStart;
     private String voteStop;
-    Util util = new Util();
-    String[] dates = util.getDates();
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -84,8 +90,12 @@ public class MainActivity extends AppCompatActivity {
                 date4 =new SimpleDateFormat("yyyy-MM-dd kk:mm:ss").parse(voteStart);
                 date5 =new SimpleDateFormat("yyyy-MM-dd kk:mm:ss").parse(voteStop);
                 dateFlag[0]= date1.compareTo(date2);
+                dateFlag[1]=date1.compareTo(date3);
+                dateFlag[2]=date1.compareTo(date4);
+                dateFlag[3]=date1.compareTo(date5);
 
-               Log.i("Flag Variables",String.valueOf(dateFlag[0]));
+
+                Log.i("Flag Variables", dateFlag[0] +"."+dateFlag[1]+"."+dateFlag[2]+"."+dateFlag[3]);
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -93,51 +103,144 @@ public class MainActivity extends AppCompatActivity {
             flag = true;
         }
 
+        if(dateFlag[0]<0){
+            //show await the registration window
+            Log.i("Before Registration","await the registration window");
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+            alertDialogBuilder.setIcon(R.drawable.mvote);
+            alertDialogBuilder.setTitle("Registration Not Open");
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setMessage("The Registration window has not yet Opened. The Period is between "+regStart+" and "+regStop+" Please come back then");
+            alertDialogBuilder.setPositiveButton("Await Registering ", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                    finishAffinity();
+                    //System.exit(0);
+                }
+            }).show();
+        }
+        if(dateFlag[2]>0 && dateFlag[3]<0){
+            //show registration window
+            Log.i("Registration","registration window open");
 
-        LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
-        View view = layoutInflater.inflate(R.layout.dialog, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-        alertDialogBuilder.setView(view);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+            alertDialogBuilder.setIcon(R.drawable.mvote);
+            alertDialogBuilder.setTitle("Registration");
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setPositiveButton("Register", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                    startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+                }
+            });
 
-        userName = (EditText) view.findViewById(R.id.editTextDialogUserName);
-        userPassword = (EditText) view.findViewById(R.id.editTextDialogUserPassword);
-        alertDialogBuilder.setIcon(android.R.drawable.ic_lock_lock);
-        alertDialogBuilder.setTitle("Authentication");
-        alertDialogBuilder.setCancelable(false);
-        alertDialogBuilder.setPositiveButton("Login",
-                new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton("Already Registered / Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // dialog.cancel();
+                    finishAffinity();
+                    System.exit(0);
+                }
+            });
+            AlertDialog ald = alertDialogBuilder.create();
+            ald.show();
+        }
+        if(dateFlag[2]>0 && dateFlag[3]<0){
+            // Await Voting
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // testLogin
-                        userID = userName.getText().toString();
-                        login(userName.getText().toString(), userPassword.getText().toString());
-                        if (!flag) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+            alertDialogBuilder.setIcon(R.drawable.mvote);
+            alertDialogBuilder.setTitle("Registration Closed");
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setMessage("The Registration window has closed. Please prepare for voting process from "+voteStart+"  to "+voteStop+".");
+            alertDialogBuilder.setPositiveButton("Await Voting ", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                    finishAffinity();
+                    //System.exit(0);
+                }
+            }).show();
+
+        }
+        if(dateFlag[1]>0 && dateFlag[2]<0){
+            //show login window
+            Log.i("Voting","Voting window open");
+            LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
+            View view = layoutInflater.inflate(R.layout.dialog, null);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+            alertDialogBuilder.setView(view);
+
+            userName = (EditText) view.findViewById(R.id.editTextDialogUserName);
+            userPassword = (EditText) view.findViewById(R.id.editTextDialogUserPassword);
+            alertDialogBuilder.setIcon(android.R.drawable.ic_lock_lock);
+            alertDialogBuilder.setTitle("Authentication");
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setPositiveButton("Login",
+                    new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // testLogin
+                            userID = userName.getText().toString();
+                            login(userName.getText().toString(), userPassword.getText().toString());
+
+                            // draws the dashboard
                             drawContents();
-                        }// draws the dashboard
+                        }
+
+                    });
+
+
+            alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // dialog.cancel();
+                    finishAffinity();
+                    System.exit(0);
+                }
+            });
+            AlertDialog ald = alertDialogBuilder.create();
+            ald.show();
+
+        }
+        if(dateFlag[4]>0){
+            //show results
+            Log.i("Results Window","Show Results Window");
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (Looper.myLooper() == null) {
+                            Looper.prepare();
+                        }
+                        new AlertDialog.Builder(MainActivity.this)
+
+                                .setTitle("Show Results")
+                                .setCancelable(false)
+                                .setMessage("Await display of results")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        finish();
+
+                                    }
+                                })
+                                .setIcon(android.R.drawable.stat_notify_error)
+                                .show();
+                        Thread.sleep(200);
+                        Looper.loop();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-
-                });
-        alertDialogBuilder.setNeutralButton("Register", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            }).start();
+        }
 
 
-                dialogInterface.dismiss();
-                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
-            }
-        });
-
-        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // dialog.cancel();
-                finishAffinity();
-                System.exit(0);
-            }
-        });
-        AlertDialog ald = alertDialogBuilder.create();
-        ald.show();
     }
 
     private void login(String userName, String userPassword) {
@@ -163,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
                     String pass;
                     pass = util.encryptPassword(userPassword);
                     String user = userName;
-                   // Log.i("Debuging Info", "Pass:" + userPassword + "-->" + pass);
+                    // Log.i("Debuging Info", "Pass:" + userPassword + "-->" + pass);
 
                     try {
                         HttpClient client = new DefaultHttpClient();
