@@ -182,26 +182,6 @@ public class Util {
             protected void onPostExecute(String result) {
 
 
-                String myJSON = result;
-                try {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                    JSONObject jsonObj = new JSONObject(myJSON);
-                    JSONArray dates = jsonObj.getJSONArray("dates");
-
-                    JSONObject c = dates.getJSONObject(0);
-                    String regStart = c.getString("RegStart");
-                    String regEnd = c.getString("RegStop");
-                    String voteStart = c.getString("VotingStart");
-                    String voteEnd = c.getString("VotingStop");
-                    Log.i("Dates", "Registration Dates:" + regStart + "-->" + regEnd + "Voting Dates:" + voteStart + "-->" + voteEnd);
-                    date[0] = regStart;
-                    date[1] = regEnd;
-                    date[2] = voteStart;
-                    date[3] = voteEnd;
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
 
 
@@ -211,9 +191,27 @@ public class Util {
         GetDataJSON g = new GetDataJSON();
 
         try {
-            String result= g.execute().get();
-            Log.i("outer",result);
-        } catch (ExecutionException e) {
+                String myJSON = g.execute().get();
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                JSONObject jsonObj = new JSONObject(myJSON);
+                JSONArray dates = jsonObj.getJSONArray("dates");
+
+                JSONObject c = dates.getJSONObject(0);
+                String regStart = c.getString("RegStart");
+                String regEnd = c.getString("RegStop");
+                String voteStart = c.getString("VotingStart");
+                String voteEnd = c.getString("VotingStop");
+                Log.i("Dates", "Registration Dates:" + regStart + "-->" + regEnd + "Voting Dates:" + voteStart + "-->" + voteEnd);
+                date[0] = regStart;
+                date[1] = regEnd;
+                date[2] = voteStart;
+                date[3] = voteEnd;
+
+        } catch (JSONException e) {
+                e.printStackTrace();
+        }
+         catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();

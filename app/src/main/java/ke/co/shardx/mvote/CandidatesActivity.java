@@ -2,13 +2,16 @@ package ke.co.shardx.mvote;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
@@ -46,6 +49,7 @@ import cz.msebera.android.httpclient.util.EntityUtils;
  */
 
 public class CandidatesActivity extends Activity {
+
     String myJSON;
     public static String position = "";
     public static String userID="";
@@ -54,6 +58,8 @@ public class CandidatesActivity extends Activity {
     private static final String TAG_NAME = "name";
     private static final String TAG_VOTES = "votes";
     private Util util = new Util();
+    private boolean voted=false;
+
 
     JSONArray peoples = null;
 
@@ -72,12 +78,18 @@ public class CandidatesActivity extends Activity {
         userID=bundle.getString("user");
         position = bundle.getString("seat");
         //System.out.println(position);
+    if (!voted){
         checkExist();
-        getData();
+        voted=true;
+    }
+            getData();
+
         list.setAdapter(new ArrayAdapter<String>(this, R.layout.activity_candidates));
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+
+
                 final int innerPos = pos;
                 String candidate = personList.get(innerPos).get("name");
                 int currentVotes = Integer.parseInt(personList.get(innerPos).get("votes"));
@@ -113,7 +125,8 @@ public class CandidatesActivity extends Activity {
                                             // System.out.println("Call your Function");
                                             //Log.i("ID in CandidateActivity",user);
                                             util.voteForCandidate(candidate, position, currentVotes, user);
-                                            finish();
+
+                                            CandidatesActivity.this.finish();
                                         }
                                     })
                                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -123,9 +136,9 @@ public class CandidatesActivity extends Activity {
                                         }
                                     })
 
-                                    .setIcon(android.R.drawable.ic_dialog_info)
+                                    .setIcon(R.drawable.icon)
                                     .show();
-
+                            Thread.sleep(200);
                             Looper.loop();
 
                         } catch (Throwable throwable) {
@@ -140,21 +153,14 @@ public class CandidatesActivity extends Activity {
     }
 
     protected void checkExist() {
-
        // final String imei = getImei();
-
-
         new Thread(new Runnable() {
             int progressBarStatus = 0;
-
+            //Context context=CandidatesActivity.this.getApplicationContext();
             public void run() {
                 while (progressBarStatus < 100) {
                     String Result;
-
-
-
                     /* Start Insert */
-
                     HttpClient client = new DefaultHttpClient();
                     String postURL = "http://student.ktvc.ac.ke/Voting-App-Server-Side-master/m-vote/check.php";
                     HttpPost post = new HttpPost(postURL);
@@ -162,6 +168,7 @@ public class CandidatesActivity extends Activity {
                     params.add(new BasicNameValuePair("seat", String.valueOf(position)));
                     params.add(new BasicNameValuePair("ID", Util.encryptPassword(userID)));
 
+                    Log.e("Show Check Error","Seat:"+String.valueOf(position)+" UID:"+Util.encryptPassword(userID));
 
                     UrlEncodedFormEntity ent = null;
                     try {
@@ -183,31 +190,38 @@ public class CandidatesActivity extends Activity {
                                 if (Looper.myLooper() == null) {
                                     Looper.prepare();
                                 }
-                                new AlertDialog.Builder(CandidatesActivity.this)
 
-                                        .setTitle("Voting Attempt Blocked!")
-                                        .setIcon(R.drawable.mvote)
-                                        .setCancelable(false)
-                                        .setMessage("You have already voted for a candidate vying for this seat. Attempt Blocked")
-                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                finish();
+                                   new AlertDialog.Builder(getApplicationContext())
 
-                                            }
-                                        })
-                                        .setIcon(android.R.drawable.stat_notify_error)
-                                        .show();
-                                //Toast.makeText(CandidatesActivity.this, "You have already Voted for this Seat", Toast.LENGTH_LONG).show();
-                                Thread.sleep(200);
-                                Looper.loop();
+                                           .setTitle("Voting Attempt Blocked!")
+                                           .setCancelable(false)
+                                           .setMessage("You have already voted for a candidate vying for this seat. Attempt Blocked")
+                                           .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                               @Override
+                                               public void onClick(DialogInterface dialog, int which) {
+
+                                                   finish();
+
+                                               }
+                                           })
+                                           .setIcon(R.drawable.mvote)
+                                           .show();
+                                   Thread.sleep(200);
+                                   Looper.loop();
+
                             }
+
                         }
+
                     } catch (IOException iox) {
                         Log.e("Error", iox.getMessage());
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                    } catch (WindowManager.BadTokenException e){
+                        e.printStackTrace();
+
+                        finish();
                     }
                 }
             }
