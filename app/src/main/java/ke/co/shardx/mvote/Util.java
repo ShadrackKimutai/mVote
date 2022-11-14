@@ -16,14 +16,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import cz.msebera.android.httpclient.HttpEntity;
@@ -106,19 +102,19 @@ public class Util {
     }
     public static String encryptPassword(String password)
     {
-        String sha1 = "";
+        String md5 = "";
         try
         {
             MessageDigest crypt = MessageDigest.getInstance("MD5");
             crypt.reset();
-            crypt.update(password.getBytes(StandardCharsets.UTF_8));
-            sha1 = byteToHex(crypt.digest()).toUpperCase();
+            crypt.update(password.getBytes(StandardCharsets.UTF_16));
+            md5 = byteToHex(crypt.digest()).toUpperCase();
         }
         catch(NoSuchAlgorithmException e)
         {
             e.printStackTrace();
         }
-        return sha1;
+        return md5;
     }
 
     private static String byteToHex(final byte[] hash)

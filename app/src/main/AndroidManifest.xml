@@ -25,6 +25,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
       <activity android:name="ke.co.shardx.mvote.RegisterActivity" />
       <activity android:name="ke.co.shardx.mvote.CandidatesActivity"/>
+      <activity android:name="ke.co.shardx.mvote.ResultsActivity" />
     </application>
 
 

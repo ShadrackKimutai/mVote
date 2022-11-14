@@ -116,11 +116,12 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
                     finishAffinity();
-                    //System.exit(0);
+                    System.exit(0);
                 }
             }).show();
+            return;
         }
-        if(dateFlag[2]>0 && dateFlag[3]<0){
+        if(dateFlag[0]>0 && dateFlag[1]<0){
             //show registration window
             Log.i("Registration","registration window open");
 
@@ -140,14 +141,17 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // dialog.cancel();
+                    dialog.dismiss();
                     finishAffinity();
-                    System.exit(0);
+                   // System.exit(0);
+
                 }
             });
             AlertDialog ald = alertDialogBuilder.create();
             ald.show();
+            return;
         }
-        if(dateFlag[2]>0 && dateFlag[3]<0){
+        if(dateFlag[1]>0 && dateFlag[2]<0){
             // Await Voting
 
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -163,9 +167,9 @@ public class MainActivity extends AppCompatActivity {
                     //System.exit(0);
                 }
             }).show();
-
+            return;
         }
-        if(dateFlag[1]>0 && dateFlag[2]<0){
+        if(dateFlag[2]>0 && dateFlag[3]<0){
             //show login window
             Log.i("Voting","Voting window open");
             LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
@@ -197,47 +201,32 @@ public class MainActivity extends AppCompatActivity {
             alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    // dialog.cancel();
+                    dialog.dismiss();
                     finishAffinity();
                     System.exit(0);
                 }
             });
             AlertDialog ald = alertDialogBuilder.create();
             ald.show();
-
+            return;
         }
-        if(dateFlag[4]>0){
+        if(dateFlag[3]>0){
             //show results
-            Log.i("Results Window","Show Results Window");
-
-            new Thread(new Runnable() {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+            alertDialogBuilder.setIcon(R.drawable.mvote);
+            alertDialogBuilder.setTitle("Voting  Closed");
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setMessage("The Voting window has closed. Click the button below to view results.");
+            alertDialogBuilder.setPositiveButton("View Results ", new DialogInterface.OnClickListener() {
                 @Override
-                public void run() {
-                    try {
-                        if (Looper.myLooper() == null) {
-                            Looper.prepare();
-                        }
-                        new AlertDialog.Builder(MainActivity.this)
-
-                                .setTitle("Show Results")
-                                .setCancelable(false)
-                                .setMessage("Await display of results")
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        finish();
-
-                                    }
-                                })
-                                .setIcon(android.R.drawable.stat_notify_error)
-                                .show();
-                        Thread.sleep(200);
-                        Looper.loop();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    startActivity(new Intent(MainActivity.this, ResultsActivity.class));
+                   // dialogInterface.dismiss();
+                    //finishAffinity();
+                    //System.exit(0);
                 }
-            }).start();
+            }).show();
+            return;
         }
 
 
@@ -266,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
                     String pass;
                     pass = util.encryptPassword(userPassword);
                     String user = userName;
-                    // Log.i("Debuging Info", "Pass:" + userPassword + "-->" + pass);
+                    Log.i("Debuging Info", "Pass:" + userPassword + "-->" + pass);
 
                     try {
                         HttpClient client = new DefaultHttpClient();
